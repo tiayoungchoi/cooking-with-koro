@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COOK킹 WITH 코RO</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: "Cursive", Arial, sans-serif;
+      background: radial-gradient(circle, #ffffff 10%, #3286f2 65%);
+      overflow: hidden;
+    }
+
+    body.cursor-hidden {
+      cursor: none;
+    }
+
+    #ingredientContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 110vw;
+      height: 120vh;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .ingredient {
+      position: absolute;
+      width: auto;
+      height: auto;
+      opacity: 100;
+    }
+
+    .ingredient img {
+      display: block;
+    }
+
+    .center-image {
+      position: absolute;
+      top: 55%;
+      left: 67vw;
+      transform: translate(-50%, -50%);
+      width: 80.7vw;
+      max-width: 1550px;
+      height: auto;
+      -webkit-user-drag: none;
+      transition: top 1s ease, left 1s ease;
+      z-index: 100;
+    }
+
+    .image-button {
+      position: absolute;
+      bottom: 2vh;
+      right: 1vw;
+      width: 18vw;
+      max-width: 210px;
+      height: auto;
+      cursor: pointer;
+      transition: opacity 0.5s ease;
+      z-index: 100;
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 95vw;
+      height: 85vh;
+      max-width: 1600px;
+      max-height: 900px;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+      z-index: 1000;
+    }
+
+    #popupDrinks {
+      background-image: url("drinkpopup.webp");
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    #popupTools {
+      background-image: url("cutlerypopup.webp");
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .popup.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drink-options, .tool-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2vw;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding: 2vw;
+      box-sizing: border-box;
+      margin-top: 20vh;
+    }
+
+    
+    .drink-options img.option, .tool-options img.option {
+  width: 24vw;            /* increased from 18vw */
+  max-width: 260px;       /* increased from 180px */
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  object-fit: contain;
+}
+
+    .tool-options img.option {
+  width: 35vw;           /* size for both spoon and chopsticks */
+  max-width: 350px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  object-fit: contain;
+      margin-top: -5vh;
+}
+    
+  .tool-options img.option:nth-child(1) {
+  width: 25vw;
+  max-width: 320px;
+}
+
+.tool-options img.option:nth-child(2) {
+  width: 40vw;
+  max-width: 480px;
+}
+
+    .drink-options img.option:hover,
+    .tool-options img.option:hover {
+      transform: scale(1.1);
+    }
+
+    .selected-drink {
+      position: fixed;
+      left: 2vw;
+      top: 13vw;
+      transform: translateY(-50%);
+      max-width: 350px;
+      height: auto;
+      display: none;
+      z-index: 50;
+    }
+
+    #customCursor {
+      display: none;
+      position: fixed;
+      width: 30vw;
+      max-width: 400px;
+      height: 30vw;
+      max-height: 400px;
+      object-fit: contain;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+
+    .title {
+      width: 80vw;
+      max-width: 900px;
+      position: absolute;
+      top: 2vh;
+      left: 2vw;
+      z-index: 9999;
+    }
+    #eraseCanvas {
+  position: absolute;
+  top: 55%;
+  left: 67vw;
+  transform: translate(-50%, -50%);
+  width: 80.7vw;
+  max-width: 1550px;
+  height: auto;
+  z-index: 101; /* Above centerImage, below tool cursor */
+  pointer-events: auto;
+}
+           .koro {
+        width: 30vw;
+        top: 20vw;
+        left: 5vw;
+        position: absolute;
+      }
+      
+      .dialog {
+        width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+          z-index: 0;
+      }
+    
+    #afterImageTop {
+  position: absolute;
+  z-index: 100;
+}
+
+#afterImageBottom {
+  position: absolute;
+  z-index: 99;
+}
+
+    #afterImageBottom {
+  position: absolute;
+  z-index: 99;
+  transition: transform 0.6s ease; /* 👈 smooth growth */
+}
+
+    #finalButton {
+  position: fixed;
+  bottom: 3vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18vw;
+  max-width: 210px;
+  height: auto;
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+  z-index: 150;
+}
+
+  </style>
+</head>
+<body>
+  
+  <img class="koro" src="koro.png">
+    <img class="dialog" src="dialogfinal2.webp">
+  
+
+  <img class="title" src="poftabuna.webp">
+  
+  <img
+  id="topLeftLogo"
+  src="percent2.webp"
+  alt="Logo"
+  style="
+    position: fixed;
+    top: 1vh;
+    right: 1vw;
+    width: 45vw;     /* adjust as needed */
+    max-width: 450px;
+    height: auto;
+    z-index: 102;
+    pointer-events: none;
+"
+/>
+  
+  <div id="ingredientContainer2">
+  <!-- Add ingredients for layer 2 here -->
+  <div class="ingredient">
+    <img src="gs.webp" style="width: 5vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ps.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ys.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="bs.webp" style="width: 5vw" />
+  </div>
+  <div class="ingredient">
+    <img src="gs.webp" style="width: 2vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ps.webp" style="width: 2vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ys.webp" style="width: 2vw" />
+  </div>
+    <div class="ingredient">
+    <img src="bs.webp" style="width: 2vw" />
+  </div>
+    </div>
+    <div class="ingredient">
+    <img src="fork.webp" style="width: 2vw" />
+  </div>
+    <div class="ingredient">
+    <img src="spoon.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="Knife.webp" style="width: 5vw" />
+  </div>
+    <div class="ingredient">
+    <img src="chopstick.webp" style="width: 5vw" />
+  </div>
+    <div class="ingredient">
+    <img src="koro.png" style="width: 10vw" />
+  </div>
+  <div class="ingredient">
+    <img src="gs.webp" style="width: 5vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ps.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ys.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="bs.webp" style="width: 5vw" />
+  </div>
+  <div class="ingredient">
+    <img src="gs.webp" style="width: 5vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ps.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ys.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="bs.webp" style="width: 5vw" />
+  </div>
+    
+</div>
+  
+  <div id="ingredientContainer">
+    <!-- Add ingredients here if needed manually or via JS -->
+  </div>
+
+  <img id="selectedDrink" class="selected-drink" src="" alt="Selected Drink" />
+  <img id="centerImage" class="center-image" src="koreanchiftele.png" alt="Plate" />
+
+  <!-- This is the bottom image (ribbon) -->
+<img id="afterImageBottom" src="ribbon2.webp" 
+     style="position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); width: 50vw; max-width: 1000px; height: auto; display: none; z-index: 99;" />
+
+<!-- This is the top image (plate) -->
+<img id="afterImageTop" src="koreanchifteleeat.png" 
+     style="position: absolute; top: 55%; left: 50%; transform: translate(-50%, -53%); width: 80vw; max-width: 1600px; height: auto; display: none; z-index: 100;" />
+
+  
+  <img id="nextButton" class="image-button" src="Next.webp" alt="Next Button" onclick="moveToCenter()" />
+
+  
+  <!-- Drink Popup -->
+  <div id="popupDrinks" class="popup">
+    <div class="drink-options">
+      <img class="option" src="socatachoice.webp" alt="Drink 1" onclick="chooseDrink(this)" />
+      <img class="option" src="tuicachoice.webp" alt="Drink 2" onclick="chooseDrink(this)" />
+      <img class="option" src="sikhyechoice.webp" alt="Drink 3" onclick="chooseDrink(this)" />
+      <img class="option" src="makchoice.webp" alt="Drink 4" onclick="chooseDrink(this)" />
+    </div>
+  </div>
+
+  <!-- Tool Popup -->
+  <div id="popupTools" class="popup">
+    <div class="tool-options">
+      <img class="option" src="forkchoice.webp" alt="Spoon" onclick="chooseTool('spoon')" />
+      <img class="option" src="chopstickchoice.webp" alt="Chopsticks" onclick="chooseTool('chopsticks')" />
+    </div>
+  </div>
+
+  <img id="customCursor" src="" alt="Cursor" />
+  
+  <img id="finalButton" class="image-button" 
+     src="again.webp" 
+     alt="Final Button" 
+     style="display: none;" />
+
+  <script>
+   function moveToCenter() {
+  document.getElementById("centerImage").style.top = "50%";
+  document.getElementById("centerImage").style.left = "50%";
+  document.getElementById("nextButton").style.opacity = "0";
+  document.querySelector(".title").style.display = "none";
+  document.getElementById("topLeftLogo").style.display = "none"; // 👈 Hide the logo here
+       document.querySelector(".koro").style.display = "none";
+  document.querySelector(".dialog").style.display = "none";
+
+     
+
+  setTimeout(() => {
+    document.getElementById("nextButton").style.display = "none";
+  }, 500);
+
+  setTimeout(() => {
+    document.getElementById("popupDrinks").classList.add("show");
+  }, 1000);
+}
+
+    function chooseDrink(imgElement) {
+  const selectedDrink = document.getElementById("selectedDrink");
+
+  const drinkMap = {
+    "Drink 1": "socata.png",
+    "Drink 2": "tuica.png",
+    "Drink 3": "sikhye.png",
+    "Drink 4": "mak.png"
+  };
+
+  const alt = imgElement.alt;
+  selectedDrink.src = drinkMap[alt] || imgElement.src;
+  selectedDrink.style.display = "block";
+
+  // ✅ Custom size & position per drink
+  if (alt === "Drink 1") {
+    selectedDrink.style.width = "22vw";
+    selectedDrink.style.maxWidth = "300px";
+    selectedDrink.style.left = "8vw";
+  } else if (alt === "Drink 2") {
+    selectedDrink.style.width = "30vw";
+    selectedDrink.style.maxWidth = "300px";
+    selectedDrink.style.left = "15vw";
+  } else if (alt === "Drink 3") {
+    selectedDrink.style.width = "30vw";
+    selectedDrink.style.maxWidth = "450px";
+    selectedDrink.style.left = "12vw";
+  } else if (alt === "Drink 4") {
+    selectedDrink.style.width = "30vw";
+    selectedDrink.style.maxWidth = "450px";
+    selectedDrink.style.left = "12vw";
+  }
+
+  document.getElementById("popupDrinks").classList.remove("show");
+
+  setTimeout(() => {
+    document.getElementById("popupTools").classList.add("show");
+  }, 2000);
+}
+
+
+
+    function chooseTool(tool) {
+      const customCursor = document.getElementById("customCursor");
+
+      if (tool === "spoon") {
+        customCursor.src = "fork.webp";
+        customCursor.style.transform = "translate(-50%, -50%) rotate(-120deg) scale(2)";
+      } else if (tool === "chopsticks") {
+        customCursor.src = "chopstick.webp";
+        customCursor.style.transform = "translate(-50%, -50%) scale(2)";
+      }
+
+      customCursor.style.display = "block";
+      document.body.classList.add("cursor-hidden");
+      document.getElementById("popupTools").classList.remove("show");
+    }
+
+    document.addEventListener("mousemove", (e) => {
+      const cursor = document.getElementById("customCursor");
+      if (cursor.style.display === "block") {
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+      }
+    });
+
+    function floatIngredients() {
+      const ingredients = document.querySelectorAll(".ingredient");
+      ingredients.forEach((ingredient) => {
+        function animateOnce() {
+          const startX = Math.random() * window.innerWidth;
+          const startY = window.innerHeight + 50;
+          const endX = startX + (Math.random() * 200 - 100);
+          const endY = -150;
+          const duration = 5000 + Math.random() * 3000;
+          const rotateDeg = Math.random() * 360;
+
+          ingredient.style.left = `${startX}px`;
+          ingredient.style.top = `${startY}px`;
+          ingredient.style.opacity = 1;
+
+          const animation = ingredient.animate([
+            { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+            { transform: `translate(${endX - startX}px, ${endY - startY}px) rotate(${rotateDeg}deg)`, opacity: 0 }
+          ], {
+            duration,
+            easing: "ease-in-out"
+          });
+
+          animation.onfinish = () => {
+            setTimeout(animateOnce, Math.random() * 2000);
+          };
+        }
+
+        animateOnce();
+      });
+    }
+
+    window.onload = () => {
+  floatIngredients(); // for #ingredientContainer
+  floatIngredientsFrom("ingredientContainer2"); // new function call
+};
+
+// Add this function BELOW your floatIngredients() function
+function floatIngredientsFrom(containerId) {
+  const ingredients = document.querySelectorAll(`#${containerId} .ingredient`);
+  ingredients.forEach((ingredient) => {
+    function animateOnce() {
+      const startX = Math.random() * window.innerWidth;
+      const startY = window.innerHeight + 50;
+      const endX = startX + (Math.random() * 200 - 100);
+      const endY = -150;
+      const duration = 5000 + Math.random() * 3000;
+      const rotateDeg = Math.random() * 360;
+
+      ingredient.style.left = `${startX}px`;
+      ingredient.style.top = `${startY}px`;
+      ingredient.style.opacity = 1;
+
+      const animation = ingredient.animate([
+        { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+        { transform: `translate(${endX - startX}px, ${endY - startY}px) rotate(${rotateDeg}deg)`, opacity: 0 }
+      ], {
+        duration,
+        easing: "ease-in-out"
+      });
+
+      animation.onfinish = () => {
+        setTimeout(animateOnce, Math.random() * 2000);
+      };
+    }
+
+    animateOnce();
+  });
+}
+    
+window.onload = () => {
+  floatIngredients(); // for #ingredientContainer
+  floatIngredientsFrom("ingredientContainer2"); // new function call
+
+  // ✅ Safe DOM access inside onload
+  document.getElementById("centerImage").addEventListener("click", () => {
+    const popupTools = document.getElementById("popupTools");
+    const centerImage = document.getElementById("centerImage");
+
+    if (popupTools.classList.contains("show")) {
+      centerImage.style.display = "none"; // or centerImage.style.opacity = "0";
+    }
+  });
+};
+
+
+
+let toolPopupJustClosed = false;
+let readyToHideCenterImage = false;
+let plateVisible = false;
+
+document.addEventListener("click", () => {
+  const centerImage = document.getElementById("centerImage");
+  const afterImageTop = document.getElementById("afterImageTop");     // Plate
+  const afterImageBottom = document.getElementById("afterImageBottom"); // Ribbon
+  const selectedDrink = document.getElementById("selectedDrink");
+  const finalButton = document.getElementById("finalButton");
+
+  if (readyToHideCenterImage && !plateVisible) {
+    centerImage.style.display = "none";
+    afterImageTop.style.display = "block";
+    afterImageBottom.style.display = "block";
+    plateVisible = true;
+    readyToHideCenterImage = false;
+  } else if (plateVisible) {
+    afterImageTop.style.display = "none";
+    selectedDrink.style.display = "none";
+    plateVisible = false;
+
+    // ✅ Show final button
+    finalButton.style.display = "block";
+    finalButton.style.opacity = "1";
+  }
+});
+
+// ✅ Redirect to index.html on click
+document.getElementById("finalButton").addEventListener("click", () => {
+  window.location.href = "index.html";
+});
+
+
+
+
+
+
+
+// inside chooseTool()
+function chooseTool(tool) {
+  const customCursor = document.getElementById("customCursor");
+  const popupTools = document.getElementById("popupTools");
+
+  if (tool === "spoon") {
+    customCursor.src = "fork.webp";
+    customCursor.style.transform = "translate(-50%, -50%) rotate(-120deg) scale(2)";
+  } else if (tool === "chopsticks") {
+    customCursor.src = "chopstick.webp";
+    customCursor.style.transform = "translate(-50%, -50%) scale(2)";
+  }
+
+  customCursor.style.display = "block";
+  document.body.classList.add("cursor-hidden");
+
+  popupTools.classList.remove("show");
+
+  // Make sure we only allow one center image removal after the popup hides
+  setTimeout(() => {
+    readyToHideCenterImage = true;
+  }, 600); // wait for transition to complete
+}
+
+
+    
+  </script>
+</body>
+</html>

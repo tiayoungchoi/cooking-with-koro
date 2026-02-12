@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COOK킹 WITH 코RO</title>
+    <style>
+      body {
+        font-family: Helvetica, sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(to left, #3286f2, white);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .Flavour {
+        width: 45vw;
+        max-width: 60vw; /* 600px converted to 60% of the viewport width (assuming viewport width is 1000px) */
+        height: auto;
+        position: absolute;
+        top: 3vh; /* 30px converted to 3% of the viewport height (assuming viewport height is 1000px) */
+        left: 3vw; /* 30px converted to 3% of the viewport width (assuming viewport width is 1000px) */
+        z-index: 1;
+      }
+
+      .flavor-option {
+        position: absolute;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .flavor-option:hover,
+      .flavor-option.selected {
+        transform: scale(1.05);
+      }
+
+      .soy-sauce {
+        top: 22vh; /* 200px converted to 20% of the viewport height (assuming viewport height is 1000px) */
+        width: 28vw;
+        right: 33vw; /* 800px converted to 80% of the viewport width (assuming viewport width is 1000px) */
+      }
+
+      .gochujang {
+        width: 30vw;
+        top: 5vh; /* 20px converted to 2% of the viewport height (assuming viewport height is 1000px) */
+        right: 2vw; /* 100px converted to 10% of the viewport width (assuming viewport width is 1000px) */
+      }
+
+      .tomato-sauce {
+        width: 35vw;
+        top: 55vh; /* 650px converted to 65% of the viewport height (assuming viewport height is 1000px) */
+        right: 5vw; /* 100px converted to 10% of the viewport width (assuming viewport width is 1000px) */
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+            .koro {
+        width: 30vw;
+        top: 20vw;
+        left: 5vw;
+        position: relative;
+      }
+      
+            .dialog {
+        width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+          z-index: 0;
+
+      }
+      
+      .dialogsoysauce {
+  display: none;
+  width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+  z-index: 10;
+}
+      .soy-sauce:hover ~ .dialogsoysauce {
+  display: block;
+}
+      
+            .dialoggochujang {
+  display: none;
+  width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+  z-index: 10;
+}
+      .gochujang:hover ~ .dialoggochujang {
+  display: block;
+}
+      
+            .dialogtomatosauce {
+  display: none;
+  width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+  z-index: 10;
+}
+      .tomato-sauce:hover ~ .dialogtomatosauce{
+  display: block;
+}
+    </style>
+  </head>
+  <body>
+    
+        <img class="koro" src="koro.png">
+<img class="dialog" src="dialogflavour.webp">
+<img class="dialogtomatosauce" src="dialogtomatosauce.webp">
+<img class="dialoggochujang" src="dialoggochujang.webp">
+
+    <img class="dialogsoysauce" src="dialogsoysauce.webp">
+    <img
+      src="sauce.webp"
+      alt="Flavour"
+      class="Flavour"
+    />
+
+    <!-- Flavor Images -->
+    <div
+      class="flavor-option soy-sauce"
+      onclick="selectFlavor(this, 'Soy Sauce')"
+    >
+      <img
+        src="soysauce.webp"
+        alt="Soy Sauce"
+      />
+    </div>
+
+    <div
+      class="flavor-option gochujang"
+      onclick="selectFlavor(this, 'Gochujang')"
+    >
+      <img
+        src="gochujang.webp"
+        alt="Gochujang"
+      />
+    </div>
+
+    <div
+      class="flavor-option tomato-sauce"
+      onclick="selectFlavor(this, 'Tomato Sauce')"
+    >
+      <img
+        src="tomatosauce.webp"
+        alt="Tomato Sauce"
+      />
+    </div>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const selectedBaseIngredient = urlParams.get("base");
+
+      if (!selectedBaseIngredient) {
+        alert("Please select a base ingredient first!");
+        window.location.href = "base_ingredient.html";
+      }
+
+      function selectFlavor(element, flavor) {
+        document
+          .querySelectorAll(".flavor-option")
+          .forEach((item) => item.classList.remove("selected"));
+        element.classList.add("selected");
+        setTimeout(() => {
+          window.location.href = `banchan.html?base=${selectedBaseIngredient}&flavor=${flavor}`;
+        }, 300);
+      }
+      
+        
+    const soySauceButton = document.querySelector('.soy-sauce');
+const dialogSoySauce = document.querySelector('.dialogsoysauce');
+
+soySauceButton.addEventListener('mouseenter', () => {
+  dialogSoySauce.style.display = 'block';
+});
+
+soySauceButton.addEventListener('mouseleave', () => {
+  dialogSoySauce.style.display = 'none';
+});
+      
+      // Gochujang
+const gochujangButton = document.querySelector('.gochujang');
+const dialogGochujang = document.querySelector('.dialoggochujang');
+
+gochujangButton.addEventListener('mouseenter', () => {
+  dialogGochujang.style.display = 'block';
+});
+
+gochujangButton.addEventListener('mouseleave', () => {
+  dialogGochujang.style.display = 'none';
+});
+
+// Tomato Sauce
+const tomatoSauceButton = document.querySelector('.tomato-sauce');
+const dialogTomatoSauce = document.querySelector('.dialogtomatosauce');
+
+tomatoSauceButton.addEventListener('mouseenter', () => {
+  dialogTomatoSauce.style.display = 'block';
+});
+
+tomatoSauceButton.addEventListener('mouseleave', () => {
+  dialogTomatoSauce.style.display = 'none';
+});
+    </script>
+      
+      
+    </script>
+  </body>
+</html>

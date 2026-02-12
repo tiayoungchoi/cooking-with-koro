@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COOK킹 WITH 코RO</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: radial-gradient(circle, #ffffff 10%, #3286f2 65%);
+        font-family: Arial, sans-serif;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .title {
+width: 49.5vw;
+        color: #333;
+margin-bottom: -5vh;
+      }
+      
+      .subtitle {
+width: 30.5vw;
+        color: #333;
+margin-bottom: 1vh;
+margin-top: 3vh;
+        
+      }
+
+      .button-container {
+        text-align: center;
+      }
+
+      .svg-button {
+width: 15.6vw;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+margin: 0.93vh;      }
+
+      .svg-button:hover {
+        transform: scale(1.1);
+      }
+
+      .about-button {
+        background-color: #dc143c;
+        color: white;
+        cursor: pointer;
+        transition: background 0.3s;
+margin: 0.93vh;
+        z-index: 999999;
+      }
+
+      .play-button:hover,
+      .about-button:hover {
+        background-color: #8b0000;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-image: url("aboutbackground.webp");
+        background-size: cover;
+        background-position: center;
+        z-index: 1000;
+        justify-content: flex-start;
+        align-items: center;
+        color: white;
+        text-align: center;
+padding: 0.46vh;      }
+
+      .modal-content {
+        max-width: 100vw;
+font-size: 2.2vh;
+        line-height: 1.5;
+      }
+
+.close-button {
+  position: absolute;
+  top: calc(10 / 1080 * 100vh); /* ≈ 0.93vh */
+  right: calc(40 / 1920 * 100vw); /* ≈ 2.08vw */
+  font-size: calc(40 / 1080 * 100vh); /* ≈ 3.7vh */
+  color: white;
+  cursor: pointer;
+  -webkit-text-stroke: 1.5px #3286f2;
+  text-shadow: 0 0 1px #3286f2, 0 0 4px #3286f2, 0 0 5px #3286f2, 0 0 6px #3286f2;
+  z-index: 1001;
+}
+
+
+     .AboutUs {
+  width: 100vw;
+  max-width: calc(2000 / 1920 * 100vw); /* ≈ 104.17vw */
+  height: auto;
+  position: absolute;
+  top: calc(-20 / 1080 * 100vh); /* ≈ -1.85vh */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.AboutText {
+  width: 60vw;
+  max-width: calc(2000 / 1920 * 100vw); /* ≈ 104.17vw */
+  height: auto;
+  position: absolute;
+  top: 35vh; /* ≈ 38.89vh */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+}
+
+
+.AboutDecoration1,
+.AboutDecoration2 {
+  width: 5vw;
+  height: auto;
+  position: absolute;
+  top: calc(380 / 1080 * 100vh); /* ≈ 35.19vh */
+  transform: translateX(-50%);
+  z-index: 1001;
+}
+
+      
+
+      .AboutDecoration1 {
+        left: 10%;
+      }
+
+      .AboutDecoration2 {
+        right: 5%;
+      }
+
+      #ingredientContainer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 110vw;
+        height: 120vh;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .ingredient {
+        position: absolute;
+        width: auto;
+        height: auto;
+        opacity: 100;
+      }
+
+      .ingredient img {
+        display: block;
+      }
+
+.Taeyoung {
+  position: fixed;
+  bottom: 14vw;
+  left: 3vw;
+  width: 14vw;
+  max-width: 300px;
+  z-index: 999;
+}
+
+.Carina {
+  position: fixed;
+  bottom: 13vw;
+  right: 3vw;
+  width: 13vw;
+  max-width: 300px;
+  z-index: 999;
+}
+      
+      .namety {
+        position: fixed;
+  bottom: 14vw;
+  left: 6vw;
+  width: 9vw;
+  max-width: 300px;
+  z-index: 999;
+      }
+      
+      .nameca {
+        position: fixed;
+  bottom: 14vw;
+  right: 6.5vw;
+  width: 6vw;
+  max-width: 300px;
+  z-index: 999;
+      }
+      
+      .tykor {
+        position: fixed;
+  bottom: 26.5vw;
+  left: 8.5vw;
+  width: 3vw;
+  max-width: 300px;
+  z-index: 999;
+      }
+      
+      .cakor {
+        position: fixed;
+  bottom: 28vw;
+  right: 7.5vw;
+  width: 5vw;
+  max-width: 300px;
+  z-index: 999;
+      }
+      
+      .subtitle-style-45 {
+  width: 60vw !important;
+  margin-bottom: 1vh !important;
+}
+
+.subtitle-style-44 {
+  width: 30vw;
+  margin-bottom: 1vh;
+}
+
+.subtitle-style-42 {
+  width: 32vw;
+  margin-bottom: 0vh;
+}
+
+    </style>
+  </head>
+
+  <body>
+    <img
+      class="title"
+      src="title.webp"
+    />
+    <img
+      class="subtitle"
+      src="subtitle.webp"
+    />
+    <div class="button-container">
+      <img
+        src="play.webp"
+        alt="Play Button"
+        class="svg-button"
+        onclick="startGame()"
+      />
+      <img
+        src="about.webp"
+        alt="About Button"
+        class="svg-button"
+        onclick="openModal()"
+      />
+    </div>
+
+    <!-- Modal -->
+    <div id="aboutModal" class="modal">
+      <div class="close-button" onclick="closeModal()">×</div>
+      <div class="modal-content">
+        <img
+          src="aboutus.webp"
+          alt="About Us"
+          class="AboutUs"
+        />
+        <img
+          src="abouttext.webp"
+          alt="About Text"
+          class="AboutText"
+        />
+        
+        <img src="taeyoung.png" class="Taeyoung">
+        <img class="namety" src="namety.webp">
+        <img class="tykor" src="tykr.webp">
+        <img src="carina.png" class="Carina">
+        <img class="nameca" src="namecarina.webp">
+        <img class="cakor" src="carinakr.webp">
+      </div>
+    </div>
+
+    <!-- Floating Ingredients -->
+   <div id="ingredientContainer">
+
+     <div id="ingredientContainer2">
+  <!-- Add ingredients for layer 2 here -->
+  <div class="ingredient">
+    <img src="gs.webp" style="width: 5vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ps.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ys.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="bs.webp" style="width: 5vw" />
+  </div>
+  <div class="ingredient">
+    <img src="gs.webp" style="width: 2vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ps.webp" style="width: 2vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ys.webp" style="width: 2vw" />
+  </div>
+    <div class="ingredient">
+    <img src="bs.webp" style="width: 2vw" />
+  </div>
+    </div>
+    <div class="ingredient">
+    <img src="fork.webp" style="width: 2vw" />
+  </div>
+    <div class="ingredient">
+    <img src="spoon.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="Knife.webp" style="width: 5vw" />
+  </div>
+    <div class="ingredient">
+    <img src="chopstick.webp" style="width: 5vw" />
+  </div>
+    <div class="ingredient">
+    <img src="koro.png" style="width: 10vw" />
+  </div>
+  <div class="ingredient">
+    <img src="gs.webp" style="width: 5vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ps.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ys.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="bs.webp" style="width: 5vw" />
+  </div>
+  <div class="ingredient">
+    <img src="gs.webp" style="width: 5vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ps.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="ys.webp" style="width: 3vw" />
+  </div>
+    <div class="ingredient">
+    <img src="bs.webp" style="width: 5vw" />
+  </div>
+
+
+
+    <script>
+  function startGame() {
+    window.location.href = "base_ingredient.html";
+  }
+
+  function openModal() {
+    document.getElementById("aboutModal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("aboutModal").style.display = "none";
+  }
+
+  function floatIngredients() {
+    const ingredients = document.querySelectorAll(".ingredient");
+
+    ingredients.forEach((ingredient) => {
+      function animateOnce() {
+        const startX = Math.random() * window.innerWidth;
+        const startY = window.innerHeight + 50;
+        const endX = startX + (Math.random() * 200 - 100);
+        const endY = -150;
+        const duration = 5000 + Math.random() * 3000;
+        const rotateDeg = Math.random() * 360;
+
+        ingredient.style.left = `${startX}px`;
+        ingredient.style.top = `${startY}px`;
+        ingredient.style.opacity = 1;
+
+        const animation = ingredient.animate(
+          [
+            {
+              transform: `translate(0, 0) rotate(0deg)`,
+              opacity: 1,
+            },
+            {
+              transform: `translate(${endX - startX}px, ${endY - startY}px) rotate(${rotateDeg}deg)`,
+              opacity: 0,
+            },
+          ],
+          {
+            duration: duration,
+            easing: "ease-in-out",
+          }
+        );
+
+        animation.onfinish = () => {
+          setTimeout(animateOnce, Math.random() * 2000);
+        };
+      }
+
+      animateOnce();
+    });
+  }
+
+  window.onload = function () {
+    floatIngredients();
+
+    // Randomize subtitle image
+    const subtitleImages = [
+      "subtitle.webp",
+      "subtitle.webp",
+      
+    ];
+
+    const subtitleEl = document.querySelector(".subtitle");
+    const randomImage = subtitleImages[Math.floor(Math.random() * subtitleImages.length)];
+    subtitleEl.src = randomImage;
+
+// Assign class based on selected image
+const imageClassMap = {
+  "Asset 41": "subtitle-style-45",
+  "Asset 44": "subtitle-style-44",
+  
+};
+
+const matchedKey = Object.keys(imageClassMap).find((key) =>
+  randomImage.includes(key)
+);
+
+if (matchedKey) {
+  subtitleEl.classList.add(imageClassMap[matchedKey]);
+}
+
+  };
+</script>
+
+  </body>
+</html>

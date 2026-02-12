@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COOK킹 WITH 코RO</title>
+    <style>
+      body {
+        font-family: Helvetica, sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(to left, #3286f2, white);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        position: relative;
+      }
+      .Banchan {
+        width: 55vw; /* Width is already in vw */
+        max-width: 60vw; /* 600px converted to 60% of the viewport width (assuming viewport width is 1000px) */
+        height: auto;
+        position: absolute;
+        top: 3vh; /* 30px converted to 3% of the viewport height (assuming viewport height is 1000px) */
+        left: 3vw; /* 30px converted to 3% of the viewport width (assuming viewport width is 1000px) */
+        z-index: 1;
+      }
+
+      .ingredient {
+        position: absolute;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .ingredient:hover,
+      .ingredient.selected {
+        transform: scale(1.05);
+      }
+
+      .kimchi {
+        width: 30vw;
+        top: 53vh; /* 600px converted to 50% of the viewport height */
+        right: 3vw; /* 100px converted to 5% of the viewport width */
+      }
+
+      .maize-flour {
+        width: 33vw;
+        top: 5vh; /* 60px converted to 6% of the viewport height (assuming viewport height is 1000px) */
+        right: 3vw; /* 230px converted to 23% of the viewport width (assuming viewport width is 1000px) */
+      }
+
+      .rice {
+        top: 35vh; /* 400px converted to 40% of the viewport height */
+        width: 23vw; /* Keeps the width in viewport units */
+        left: 42vw; /* 600px converted to 60% of the viewport width */
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      
+      
+              .koro {
+        width: 30vw;
+        top: 20vw;
+        left: 5vw;
+        position: relative;
+      }
+      
+      .dialog {
+        width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+          z-index: 0;
+
+      }
+      
+            .dialogkimchi {
+  display: none;
+  width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+  z-index: 10;
+}
+      .kimchi:hover ~ .dialogkimchi {
+  display: block;
+}
+      
+            .dialogrice {
+  display: none;
+  width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+  z-index: 10;
+}
+      .rice:hover ~ .dialogrice {
+  display: block;
+}
+      
+            .dialogmaizeflour {
+  display: none;
+  width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+  z-index: 10;
+}
+      .maize-flour:hover ~ .dialogmaizeflour {
+  display: block;
+}
+    </style>
+  </head>
+  <body>
+    
+    <img class="koro" src="koro.png">
+    <img class="dialog" src="banchandialog.webp">
+    <img class="dialogrice" src="dialogrice.webp">
+    <img class="dialogkimchi" src="dialogkimchi.webp">
+    <img class="dialogmaizeflour" src="dialogmaize.webp">
+
+    <img
+      src="banchan.webp"
+      alt="Banchan"
+      class="Banchan"
+    />
+
+    <!-- Ingredient Options -->
+    <div
+      class="ingredient kimchi"
+      onclick="selectIngredient(this)"
+      data-ingredient="Kimchi"
+    >
+      <img
+        src="kimchi.webp"
+        alt="Kimchi"
+      />
+    </div>
+
+    <div
+      class="ingredient maize-flour"
+      onclick="selectIngredient(this)"
+      data-ingredient="Maize Flour"
+    >
+      <img
+        src="maize.webp"
+        alt="Maize Flour"
+      />
+    </div>
+
+    <div
+      class="ingredient rice"
+      onclick="selectIngredient(this)"
+      data-ingredient="Rice"
+    >
+      <img
+        src="rice.webp"
+        alt="Rice"
+      />
+    </div>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const selectedBaseIngredient = urlParams.get("base");
+      const selectedFlavor = urlParams.get("flavor");
+
+      if (!selectedBaseIngredient || !selectedFlavor) {
+        alert("Please select a base ingredient and flavor first!");
+        window.location.href = "base_ingredient.html";
+      }
+
+      function selectIngredient(element) {
+        const selectedMainComponent = element.getAttribute("data-ingredient");
+
+        if (!selectedMainComponent) {
+          alert("Invalid selection.");
+          return;
+        }
+
+        checkCombination(
+          selectedBaseIngredient,
+          selectedFlavor,
+          selectedMainComponent
+        );
+      }
+
+      function checkCombination(base, flavor, component) {
+        const combinations = [
+          {
+            base: "Pork",
+            flavor: "Soy Sauce",
+            component: "Maize Flour",
+            result: "result1_1.html",
+          },
+          {
+            base: "Pork",
+            flavor: "Gochujang",
+            component: "Maize Flour",
+            result: "result1_2.html",
+          },
+          {
+            base: "Pork",
+            flavor: "Tomato Sauce",
+            component: "Maize Flour",
+            result: "result1_3.html",
+          },
+          {
+            base: "Tofu",
+            flavor: "Soy Sauce",
+            component: "Maize Flour",
+            result: "result1_4.html",
+          },
+          {
+            base: "Tofu",
+            flavor: "Gochujang",
+            component: "Maize Flour",
+            result: "result1_5.html",
+          },
+          {
+            base: "Tofu",
+            flavor: "Tomato Sauce",
+            component: "Maize Flour",
+            result: "result1_6.html",
+          },
+
+          {
+            base: "Pork",
+            flavor: "Soy Sauce",
+            component: "Rice",
+            result: "result2_1.html",
+          },
+          {
+            base: "Pork",
+            flavor: "Gochujang",
+            component: "Rice",
+            result: "result2_2.html",
+          },
+          {
+            base: "Tofu",
+            flavor: "Soy Sauce",
+            component: "Rice",
+            result: "result2_3.html",
+          },
+          {
+            base: "Tofu",
+            flavor: "Gochujang",
+            component: "Rice",
+            result: "result2_4.html",
+          },
+
+          {
+            base: "Pork",
+            flavor: "Gochujang",
+            component: "Kimchi",
+            result: "result3_1.html",
+          },
+          {
+            base: "Pork",
+            flavor: "Soy Sauce",
+            component: "Kimchi",
+            result: "result3_2.html",
+          },
+          {
+            base: "Pork",
+            flavor: "Tomato Sauce",
+            component: "Rice",
+            result: "result3_3.html",
+          },
+          {
+            base: "Pork",
+            flavor: "Tomato Sauce",
+            component: "Kimchi",
+            result: "result3_4.html",
+          },
+          {
+            base: "Tofu",
+            flavor: "Soy Sauce",
+            component: "Kimchi",
+            result: "result3_5.html",
+          },
+          {
+            base: "Tofu",
+            flavor: "Gochujang",
+            component: "Kimchi",
+            result: "result3_6.html",
+          },
+          {
+            base: "Tofu",
+            flavor: "Tomato Sauce",
+            component: "Rice",
+            result: "result3_7.html",
+          },
+          {
+            base: "Tofu",
+            flavor: "Tomato Sauce",
+            component: "Kimchi",
+            result: "result3_8.html",
+          },
+        ];
+
+        const match = combinations.find(
+          (comb) =>
+            comb.base === base &&
+            comb.flavor === flavor &&
+            comb.component === component
+        );
+
+        if (match) {
+          window.location.href = match.result;
+        } else {
+          alert("No matching combination found!");
+        }
+      }
+      
+      // Kimchi Hover Dialog
+const kimchiButton = document.querySelector('.kimchi');
+const dialogKimchi = document.querySelector('.dialogkimchi');
+
+kimchiButton.addEventListener('mouseenter', () => {
+  dialogKimchi.style.display = 'block';
+});
+
+kimchiButton.addEventListener('mouseleave', () => {
+  dialogKimchi.style.display = 'none';
+});
+
+// Maize Flour Hover Dialog
+const maizeFlourButton = document.querySelector('.maize-flour');
+const dialogMaizeFlour = document.querySelector('.dialogmaizeflour');
+
+maizeFlourButton.addEventListener('mouseenter', () => {
+  dialogMaizeFlour.style.display = 'block';
+});
+
+maizeFlourButton.addEventListener('mouseleave', () => {
+  dialogMaizeFlour.style.display = 'none';
+});
+
+// Rice Hover Dialog
+const riceButton = document.querySelector('.rice');
+const dialogRice = document.querySelector('.dialogrice');
+
+riceButton.addEventListener('mouseenter', () => {
+  dialogRice.style.display = 'block';
+});
+
+riceButton.addEventListener('mouseleave', () => {
+  dialogRice.style.display = 'none';
+});
+
+    </script>
+  </body>
+</html>

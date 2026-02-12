@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COOK킹 WITH 코RO</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+      }
+      .scene {
+        display: none;
+        width: 100%;
+        height: 100%;
+      }
+      .active {
+        display: flex;
+      }
+
+      #scene1 {
+        background: linear-gradient(white 60%, #fef100);
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        position: relative;
+      }
+      #scene1 .title {
+        width: 50vw; /* 50% of the viewport width */
+        position: absolute;
+        top: 2vh; /* 2% of the viewport height */
+        left: 2vw; /* 2% of the viewport width */
+        z-index: 100;
+      }
+      #scene1 .food {
+        width: 65vw;
+        max-width: 1550px;
+        height: auto;
+        position: absolute;
+        top: 10vw;
+        left: 68vw;
+        transform: translateX(-50%);
+      }
+      #scene1 .next {
+        position: absolute;
+      bottom: 2vh;
+      right: 1vw;
+      width: 18vw;
+      max-width: 210px;
+      height: auto;
+      cursor: pointer;
+      transition: opacity 0.5s ease;
+      z-index: 100;
+      }
+      #scene1 .next:hover {
+        transform: scale(1.1);
+      }
+      #scene2,
+      #scene3,
+      #scene4 {
+        background: radial-gradient(circle, #ffffff 10%, #f74fae 65%);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        user-select: none;
+        cursor: none;
+        position: relative;
+        display: none;
+      }
+      #scene2.active,
+      #scene3.active,
+      #scene4.active {
+        display: flex;
+      }
+      #container {
+        position: relative;
+        width: 600px;
+        height: 600px;
+        overflow: visible;
+      }
+      #board {
+        position: absolute;
+        top: -10px;
+        left: 90%;
+        transform: translateX(-50%);
+        width: 1000px;
+        height: auto;
+        z-index: 0;
+      }
+      #ingredient-wrapper {
+        display: flex;
+        height: 600px;
+        position: absolute;
+        right: -14vw;
+        top: 0;
+        z-index: 1;
+      }
+      .slice {
+        height: 100%;
+        background-image: url("3dtofu.png");
+        background-size: 600px 600px;
+        background-repeat: no-repeat;
+        transition: transform 0.5s ease-in-out;
+        flex-shrink: 0;
+        pointer-events: none;
+      }
+      .slice.cut {
+        z-index: 10;
+      }
+      #custom-cursor-2,
+      #custom-cursor-3 {
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+      }
+      #custom-cursor-2 {
+        width: 300px;
+        display: none;
+      }
+      #custom-cursor-3 {
+        width: 200px;
+        display: none;
+      }
+      #scene4 {
+  cursor: auto;
+}
+      #scene2.active #custom-cursor-2,
+      #scene3.active #custom-cursor-3 {
+        display: block;
+      }
+      #scene2.active #custom-cursor-2,
+      #scene3.active #custom-cursor-3 {
+        display: block;
+      }
+      #next-button,
+      #next-button-4 {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 200px;
+        height: auto;
+        cursor: pointer;
+        z-index: 1000;
+        display: none;
+      }
+      .image-container {
+        position: relative;
+        width: 700px;
+        height: 500px;
+      }
+      .image-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 700px;
+        height: auto;
+        -webkit-user-drag: none;
+      }
+      #hidden-image-4 {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 2;
+      }
+      
+      .bar {
+        position: absolute;
+        width: 95vw;
+        top: 50px;
+      }
+      
+       .scene4-images-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: -2vw;
+  margin-top: 10vh;
+  width: 80%;
+  margin-left: 35vw;
+}
+
+.scene4-images {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: -2vh; /* Small vertical gap */
+}
+
+.scene4-img {
+  width: 35vw;
+  max-width: 300px;
+  height: auto;
+}
+
+.scene4-img.img1 {
+  width: 40vw;
+  max-width: 350px;
+}
+
+.scene4-img.img2 {
+  width: 40vw;
+  max-width: 300px;
+}
+     
+      .scene4-img.img1 {
+  width: 45vw;       /* or whatever smaller value you want */
+  max-width: 500px;  /* optional, override default max */
+}
+      .scene4-img:not(.img2) {
+  -webkit-user-drag: none;
+}
+      .dialog {
+        width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+          z-index: 0;
+
+      }
+      
+      .koro {
+        width: 30vw;
+        top: 20vw;
+        left: 5vw;
+        position: absolute;
+      }
+      
+                        .koros2 {
+        width: 30vw;
+        top: 12vw;
+        left: 5vw;
+        position: absolute;
+      }
+      
+      .dialogs2 {
+        width: 30vw;
+        top: 35vw;
+        left: 5vw;
+        position: absolute;
+          z-index: 0;
+      }
+    </style>
+  </head>
+  <body>
+    
+
+    <div id="scene1" class="scene active">
+      
+          <img class="koro" src="koro.png">
+          <img class="dialog" src="dialogkimchisarmale.webp">
+      <img
+        class="title"
+        src="kimchisarmale.webp"
+      />
+   <img
+        class="food"
+        src="kimchisarmale.png"
+      />
+      <img
+        class="next"
+        src="Next.webp"
+        onclick="goToScene(2)"
+      />
+         <!-- Popup Button as Image -->
+<img
+  id="info-button"
+  src="recipe.webp"
+  alt="Recipe"
+  style="
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 180px;
+    height: auto;
+    cursor: pointer;
+    z-index: 1000;
+  "
+  onclick="forceDownload(
+    'https://cdn.glitch.global/33a161c1-563b-45bf-abc1-16ca811d8cb4/Cooking%20with%20Koro.pdf?v=1747832121060',
+    'Cooking_with_Koro.pdf'
+  )"
+/>
+
+    </div>
+
+    <div id="scene2" class="scene">
+      
+      <img class="koros2" src="koro.png">
+    <img class="dialogs2" src="mamaligastep1tofu.webp">
+      
+      <img
+        class="bar"
+        src="0.webp"
+      />
+      <img
+        id="custom-cursor-2"
+        src="Knife.webp"
+      />
+      <div id="container">
+        <img
+          id="board"
+          src="CuttingBoard.png"
+        />
+        <div id="ingredient-wrapper"></div>
+      </div>
+      <img
+        id="next-button"
+        src="Next.webp"
+        onclick="goToScene(3)"
+      />
+    </div>
+
+    <div id="scene3" class="scene">
+      
+      <img class="koros2" src="koro.png">
+    <img class="dialogs2" src="mamaligastep2.webp">
+      
+      <img
+        class="bar"
+        src="50.webp"
+      />
+
+      <img
+        id="custom-cursor-3"
+        src="soysaucebottle.png"
+      />
+
+<div style="position: relative; width: 450px; height: auto; margin-top: 10vh;">
+        <img
+          id="under-image"
+          style="
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 700px;
+            transform: translate(-50%, -60%);
+            -webkit-user-drag: none;
+          "
+          src="Tofu_Blur.png"
+        />
+        <img
+          id="next-stage-image"
+          style="
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 700px;
+            transform: translate(-50%, -60%);
+            opacity: 0;
+            z-index: 100;
+            pointer-events: none;
+            -webkit-user-drag: none;
+          "
+          src="Soy SauceTofu_Blur.png"
+        />
+      </div>
+
+      <img
+        id="next-button"
+        src="Next.webp"
+        onclick="goToScene(4)"
+      />
+    </div>
+
+    <div id="scene4" class="scene">
+      <img
+        class="bar"
+        src="99.webp"
+      />
+      <div class="scene4-images-row">
+        
+              <img class="koros2" src="koro.png">
+          <img class="dialogs2" src="kimchistep3.webp">
+        
+  <div class="scene4-images">
+    <img class="scene4-img img1" src="kimchistrip.png" alt="Image 1" data-index="0" />
+    <img class="scene4-img img2" src="sarmaleinside.png" alt="Image 2" draggable="true" data-index="0" />
+  </div>
+  <div class="scene4-images">
+    <img class="scene4-img img1" src="kimchistrip.png" alt="Image 1" data-index="1" />
+    <img class="scene4-img img2" src="sarmaleinside.png" alt="Image 2" draggable="true" data-index="1" />
+  </div>
+  <div class="scene4-images">
+    <img class="scene4-img img1" src="kimchistrip.png" alt="Image 1" data-index="2" />
+    <img class="scene4-img img2" src="sarmaleinside.png" alt="Image 2" draggable="true" data-index="2" />
+  </div>
+</div>
+      <img id="next-button-4"
+      src="Next.webp"
+      style="display: none" onclick="window.location.href='final3.html'" cursor:
+      auto; />
+    </div>
+
+    <script>
+      function forceDownload(url, filename) {
+  fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    })
+    .catch(console.error);
+}
+      function goToScene(sceneNum) {
+        document
+          .querySelectorAll(".scene")
+          .forEach((el) => el.classList.remove("active"));
+        document.getElementById(`scene${sceneNum}`).classList.add("active");
+      }
+
+      const wrapper = document.getElementById("ingredient-wrapper");
+      const sliceCount = 6;
+      const sliceWidth = 600 / sliceCount;
+      let currentSlice = 0;
+
+      document.getElementById("info-button").addEventListener("click", () => {
+        document.getElementById("popup-modal").style.display = "block";
+      });
+
+      function closePopup() {
+        document.getElementById("popup-modal").style.display = "none";
+      }
+
+      function goToScene(sceneNum) {
+        document
+          .querySelectorAll(".scene")
+          .forEach((el) => el.classList.remove("active"));
+        const newScene = document.getElementById(`scene${sceneNum}`);
+        newScene.classList.add("active");
+
+        // Hide the popup and button when not in Scene 1
+        const infoButton = document.getElementById("info-button");
+        const popupModal = document.getElementById("popup-modal");
+        if (sceneNum !== 1) {
+          if (infoButton) infoButton.style.display = "none";
+          if (popupModal) popupModal.style.display = "none";
+        } else {
+          if (infoButton) infoButton.style.display = "block";
+        }
+
+        if (sceneNum === 2) {
+          currentSlice = 0;
+          createSlices();
+          document.querySelector("#scene2 #next-button").style.display = "none";
+          enableSlicing = false;
+          firstClickSkipped = false;
+
+          setTimeout(() => {
+            enableSlicing = true;
+          }, 100);
+        } else {
+          enableSlicing = false;
+        }
+      }
+      
+      for (let i = 0; i < sliceCount; i++) {
+        const slice = document.createElement("div");
+        slice.classList.add("slice");
+        slice.style.width = `${sliceWidth}px`;
+        slice.style.backgroundPosition = `-${i * sliceWidth}px 0px`;
+        wrapper.appendChild(slice);
+      }
+
+      document.addEventListener("click", () => {
+        if (
+          document.getElementById("scene2").classList.contains("active") &&
+          currentSlice < sliceCount
+        ) {
+          const slice = wrapper.children[currentSlice];
+          const middle = (sliceCount - 1) / 2;
+          const direction = currentSlice < middle ? -1 : 1;
+          const movement =
+            direction * (Math.abs(currentSlice - middle) * (40 / middle) + 8);
+          const rotation = Math.random() * 6 - 3;
+          slice.classList.add("cut");
+          slice.style.transform = `translateX(${movement}px) rotate(${rotation}deg)`;
+          currentSlice++;
+          if (currentSlice === sliceCount)
+            document.querySelector("#scene2 #next-button").style.display =
+              "block";
+        }
+      });
+
+      let isHolding = false;
+      let opacity = 0;
+      let hasRevealedFully = false;
+
+      document.addEventListener("mousemove", (e) => {
+        const c2 = document.getElementById("custom-cursor-2");
+        const c3 = document.getElementById("custom-cursor-3");
+        const c4 = document.getElementById("custom-cursor-4");
+        if (
+          c2 &&
+          document.getElementById("scene2").classList.contains("active")
+        ) {
+          c2.style.left = `${e.clientX}px`;
+          c2.style.top = `${e.clientY}px`;
+        }
+        if (
+          c3 &&
+          document.getElementById("scene3").classList.contains("active")
+        ) {
+          c3.style.left = `${e.clientX}px`;
+          c3.style.top = `${e.clientY}px`;
+          if (isHolding && opacity < 1) {
+            opacity += 0.002;
+            document.getElementById("next-stage-image").style.opacity =
+              opacity.toFixed(3);
+            if (opacity >= 1 && !hasRevealedFully) {
+              hasRevealedFully = true;
+              setTimeout(() => {
+                document.querySelector("#scene3 #next-button").style.display =
+                  "block";
+              }, 300);
+            }
+          }
+        }
+        if (
+          c4 &&
+          document.getElementById("scene4").classList.contains("active")
+        ) {
+          c4.style.left = `${e.clientX}px`;
+          c4.style.top = `${e.clientY}px`;
+
+          const dx = e.clientX - lastX;
+          const dy = e.clientY - lastY;
+          const angle = Math.atan2(dy, dx);
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 20) {
+            angleHistory.push({ angle });
+            if (angleHistory.length > 10) angleHistory.shift();
+
+            let angleDiffSum = 0;
+            for (let i = 1; i < angleHistory.length; i++) {
+              let diff = angleHistory[i].angle - angleHistory[i - 1].angle;
+              diff = ((diff + Math.PI) % (2 * Math.PI)) - Math.PI;
+              angleDiffSum += Math.abs(diff);
+            }
+
+            if (angleDiffSum > 2 * Math.PI && opacity4 < 1) {
+              opacity4 += 0.04;
+              document.getElementById("hidden-image-4").style.opacity =
+                opacity4;
+            }
+
+            if (opacity4 >= 1 && !nextShown4) {
+              document.getElementById("next-button-4").style.display = "block";
+              nextShown4 = true;
+            }
+          }
+
+          lastX = e.clientX;
+          lastY = e.clientY;
+        }
+      });
+
+      document.addEventListener("mousedown", () => {
+        isHolding = true;
+      });
+      document.addEventListener("mouseup", () => {
+        isHolding = false;
+      });
+
+      let lastX = 0,
+        lastY = 0,
+        angleHistory = [],
+        opacity4 = 0,
+        nextShown4 = false;
+      document.querySelectorAll(".img2").forEach(img => {
+  img.addEventListener("mousedown", startDrag);
+});
+
+let dragged = null;
+let offsetX = 0;
+let offsetY = 0;
+
+function startDrag(e) {
+  dragged = e.target;
+  const rect = dragged.getBoundingClientRect();
+  offsetX = e.clientX - rect.left;
+  offsetY = e.clientY - rect.top;
+
+  dragged.style.position = "absolute";
+  dragged.style.zIndex = "10000";
+  dragged.style.pointerEvents = "none"; // prevent interfering
+
+  moveAt(e.pageX, e.pageY);
+
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup", onMouseUp);
+}
+
+function moveAt(pageX, pageY) {
+  if (dragged) {
+    dragged.style.left = pageX - offsetX + "px";
+    dragged.style.top = pageY - offsetY + "px";
+  }
+}
+
+function onMouseMove(e) {
+  moveAt(e.pageX, e.pageY);
+}
+      
+      let completedDrops = 0;
+const totalDropsNeeded = document.querySelectorAll(".img1").length;
+
+
+function onMouseUp(e) {
+  document.removeEventListener("mousemove", onMouseMove);
+  document.removeEventListener("mouseup", onMouseUp);
+
+  const draggedIndex = dragged.dataset.index;
+  const img1 = document.querySelector(`.img1[data-index="${draggedIndex}"]`);
+  const img1Rect = img1.getBoundingClientRect();
+  const draggedRect = dragged.getBoundingClientRect();
+
+  const isOverlapping =
+    draggedRect.left < img1Rect.right &&
+    draggedRect.right > img1Rect.left &&
+    draggedRect.top < img1Rect.bottom &&
+    draggedRect.bottom > img1Rect.top;
+
+  if (isOverlapping) {
+  img1.style.opacity = "0";
+  img1.style.pointerEvents = "none";
+
+  dragged.src = draggedNewImages[draggedIndex];
+dragged.style.pointerEvents = "none";
+dragged.style.cursor = "default";
+
+// Reset position and slightly shift upward
+dragged.style.position = "relative";
+dragged.style.left = "0";
+dragged.style.top = "0";
+dragged.style.zIndex = "";
+dragged.style.transform = "translateY(-70px)"; // adjust this value as needed
+
+} else {
+  // Reset position if not dropped correctly
+  dragged.style.position = "";
+  dragged.style.left = "";
+  dragged.style.top = "";
+  dragged.style.zIndex = "";
+  dragged.style.pointerEvents = "auto";
+}
+  
+  completedDrops++;
+if (completedDrops === totalDropsNeeded) {
+  document.getElementById("next-button-4").style.display = "block";
+}
+
+
+  dragged = null;
+}
+
+const newImages = [
+  "singlekimchisarmale.png",
+  "singlekimchisarmale.png",
+  "singlekimchisarmale.png"
+];
+
+const draggedNewImages = [
+  "singlekimchisarmale.png",
+  "singlekimchisarmale.png",
+  "singlekimchisarmale.png"
+];
+    </script>
+  </body>
+</html>

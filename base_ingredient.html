@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COOK킹 WITH 코RO</title>
+    <style>
+      body {
+        font-family: Helvetica, sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(to left, #3286f2, white);
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .BaseIngredient {
+        width: 35vw;
+        max-width: 60vw; /* 600px converted to 60% of the viewport width (assuming viewport width is 1000px) */
+        height: auto;
+        position: absolute;
+        top: 3vh; /* 30px converted to 3% of the viewport height (assuming viewport height is 1000px) */
+        left: 3vw; /* 30px converted to 3% of the viewport width (assuming viewport width is 1000px) */
+        z-index: 1;
+      }
+
+      .ingredient-button {
+        position: absolute;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .ingredient-button:hover,
+      .ingredient-button.selected {
+        transform: scale(1.05);
+      }
+
+      .Pork {
+        width: 40vw;
+        top: 50vh; /* 600px converted to 60% of the viewport height (assuming viewport height is 1000px) */
+        right: 15vw; /* 350px converted to 35% of the viewport width (assuming viewport width is 1000px) */
+      }
+
+      .Tofu {
+        width: 30vw;
+        top: 8vh; /* 80px converted to 8% of the viewport height (assuming viewport height is 1000px) */
+        right: 10vw; /* 100px converted to 10% of the viewport width (assuming viewport width is 1000px) */
+      }
+      .Tofu {
+        width: 30vw;
+        top: 8vh; /* 80px converted to 8% of the viewport height (assuming viewport height is 1000px) */
+        right: 7vw; /* 100px converted to 10% of the viewport width (assuming viewport width is 1000px) */
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      /*     .pink-square {
+      position: absolute;
+      bottom: 0px;
+      left: 60px;
+      width: 250px;
+      height: 300px;
+      background-color: hotpink;
+      z-index: 0;
+      border: 4px solid black;
+    } */
+
+      .board {
+        position: absolute;
+        height: 100%;
+        width: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: -100;
+      }
+
+      .textbox {
+        z-index: 0;
+        left: 15%;
+        width: 800px;
+        position: absolute;
+        bottom: 10%;
+      }
+      
+            .koro {
+        width: 30vw;
+        top: 20vw;
+        left: 5vw;
+        position: relative;
+      }
+      
+      .dialog {
+        width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+          z-index: 0;
+
+      }
+.dialogpork {
+  display: none;
+  width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+  z-index: 10;
+}
+      .Pork:hover ~ .dialogpork {
+  display: block;
+}
+      
+      .dialogtofu {
+  display: none;
+  width: 30vw;
+        top: 40vw;
+        left: 5vw;
+        position: absolute;
+  z-index: 10;
+}
+      .tofu:hover ~ .dialogtofu {
+  display: block;
+}
+
+    </style>
+  </head>
+  <body>
+    
+        <img class="koro" src="koro.png">
+<img class="dialog" src="dialog.webp">
+  <img class="dialogpork" src="dialogpork.webp">
+    <img class="dialogtofu" src="dialogtofu.webp">
+     <img
+      class="BaseIngredient"
+      src="MainIngredient.webp"/>
+
+    <!-- Ingredient Buttons -->
+    <div
+      class="ingredient-button Pork"
+      onclick="selectBaseIngredient(this, 'Pork')"
+    >
+      <img
+        src="pork.webp"
+        alt="Pork"
+      />
+    </div>
+
+    <div
+      class="ingredient-button Tofu"
+      onclick="selectBaseIngredient(this, 'Tofu')"
+    >
+      <img
+        src="tofu.webp"
+        alt="Tofu"
+      />
+    </div>
+
+    <!-- 🔺 Pink Square in Bottom Left -->
+    <div class="pink-square"></div>
+
+    <script>
+      
+      const tofuButton = document.querySelector('.Tofu');
+const dialogTofu = document.querySelector('.dialogtofu');
+
+tofuButton.addEventListener('mouseenter', () => {
+  dialogTofu.style.display = 'block';
+});
+
+tofuButton.addEventListener('mouseleave', () => {
+  dialogTofu.style.display = 'none';
+});
+
+      
+      function selectBaseIngredient(element, base) {
+        document
+          .querySelectorAll(".ingredient-button")
+          .forEach((btn) => btn.classList.remove("selected"));
+        element.classList.add("selected");
+        setTimeout(() => {
+          window.location.href = `choose_flavour.html?base=${base}`;
+        }, 300);
+      }
+      
+        const porkButton = document.querySelector('.Pork');
+  const dialogPork = document.querySelector('.dialogpork');
+
+  porkButton.addEventListener('mouseenter', () => {
+    dialogPork.style.display = 'block';
+  });
+
+  porkButton.addEventListener('mouseleave', () => {
+    dialogPork.style.display = 'none';
+  });
+    </script>
+  </body>
+</html>
